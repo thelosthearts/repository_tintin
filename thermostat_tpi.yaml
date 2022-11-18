@@ -82,7 +82,7 @@ action:
       fenetre: '{{states(entity_fenetre)}}'
       puissance: >-
         {%set val = coeff_c * (consigne - temp_int) + coeff_t * (consigne -temp_ext) %}  
-        {% if val > 0.95 and fenetre == 'off' %} {% set val = 100 %}  
+        {% if val > 0.95 and (fenetre == 'off' or fenetre == 'unavailable') %} {% set val = 100 %}  
         {% elif val < 0.17 or fenetre == 'on' %} {% set val = 0 %}  
         {% else %} {% set val = ( (val * 100) | round(0)) %} 
         {% endif %} {{val}}
