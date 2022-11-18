@@ -67,7 +67,7 @@ variables:
   entity_fenetre: !input entity_fenetre
 trigger:
   - platform: time_pattern
-    minutes: "/10"
+    minutes: "/30"
   - platform: state
     entity_id: !input entity_consigne
   - platform: state
@@ -82,11 +82,11 @@ action:
       fenetre: '{{states(entity_fenetre)}}'
       puissance: >-
         {%set val = coeff_c * (consigne - temp_int) + coeff_t * (consigne -temp_ext) %}  
-        {% if val > 1 and fenetre == 'off' %} {% set val = 100 %}  
-        {% elif val < 0 or fenetre == 'on' %} {% set val = 0 %}  
+        {% if val > 0.95 and fenetre == 'off' %} {% set val = 100 %}  
+        {% elif val < 0.17 or fenetre == 'on' %} {% set val = 0 %}  
         {% else %} {% set val = ( (val * 100) | round(0)) %} 
         {% endif %} {{val}}
-      temps_chauffe: '{{ puissance * 6 }}'
+      temps_chauffe: '{{ puissance * 18 }}'
   - alias: Met à jour l'indicateur de puissance
     service: input_number.set_value
     target:
